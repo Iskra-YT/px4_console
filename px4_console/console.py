@@ -51,8 +51,6 @@ class CommanderNode(Node):
         self.command_thread = threading.Thread(target=self.command_loop, daemon=True)
         self.command_thread.start()
 
-        self.get_logger().info("Command thread started")
-
     def publish_offboard_mode(self):
         msg = OffboardControlMode()
         msg.position = True
@@ -114,6 +112,9 @@ class CommanderNode(Node):
                     self.arm()
                 elif tokens[0] == "offboard":
                     self.enable_offboard()
+                elif tokens[0] == "start":
+                    self.arm()
+                    self.enable_offboard()
                 elif tokens[0] == "forward":
                     distance = float(tokens[1]) if len(tokens) > 1 else 1.0
                     self.forward(distance)
@@ -129,7 +130,7 @@ class CommanderNode(Node):
 
     def forward(self, distance):
         self.target_position[0] += distance * math.cos(self.current_yaw)
-        self.target_position[1] += distance * math.sin(self.current_yaw)
+        self.target_position[2] += distance * math.sin(self.current_yaw)
 
 def main(args=None):
     rclpy.init(args=args)
