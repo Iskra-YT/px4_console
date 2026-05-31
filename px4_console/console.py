@@ -115,9 +115,13 @@ class CommanderNode(Node):
                 elif tokens[0] == "start":
                     self.arm()
                     self.enable_offboard()
+
                 elif tokens[0] == "forward":
                     distance = float(tokens[1]) if len(tokens) > 1 else 1.0
                     self.forward(distance)
+                elif tokens[0] == "up":
+                    distance = float(tokens[1]) if len(tokens) > 1 else 5.0
+                    self.up(distance)
                 else:
                     self.get_logger().info(f"Unknown command: {tokens[0]}")
 
@@ -130,7 +134,10 @@ class CommanderNode(Node):
 
     def forward(self, distance):
         self.target_position[0] += distance * math.cos(self.current_yaw)
-        self.target_position[2] += distance * math.sin(self.current_yaw)
+        self.target_position[1] += distance * math.sin(self.current_yaw)
+
+    def up(self, distance):
+        self.target_position[2] -= distance
 
 def main(args=None):
     rclpy.init(args=args)
