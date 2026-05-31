@@ -119,6 +119,14 @@ class CommanderNode(Node):
                 elif tokens[0] == "forward":
                     distance = float(tokens[1]) if len(tokens) > 1 else 1.0
                     self.forward(distance)
+                elif tokens[0] == "back":
+                    distance = float(tokens[1]) if len(tokens) > 1 else 1.0
+                    self.forward(-distance)
+                
+                elif tokens[0] == "yaw":
+                    angle = float(tokens[1]) if len(tokens) > 1 else 15.0
+                    self.yaw(angle)
+
                 elif tokens[0] == "up":
                     distance = float(tokens[1]) if len(tokens) > 1 else 5.0
                     self.up(distance)
@@ -138,6 +146,15 @@ class CommanderNode(Node):
 
     def up(self, distance):
         self.target_position[2] -= distance
+
+    def yaw(self, angle_deg):
+        self.target_yaw += math.radians(angle_deg)
+
+        while self.target_yaw > math.pi:
+            self.target_yaw -= 2 * math.pi
+
+        while self.target_yaw < -math.pi:
+            self.target_yaw += 2 * math.pi
 
 def main(args=None):
     rclpy.init(args=args)
