@@ -100,6 +100,26 @@ class CommanderNode(Node):
 
         self.get_logger().info('Vehicle armed')
 
+    def disarm(self):
+        msg = VehicleCommand()
+
+        msg.command = VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM
+        msg.param1 = 0.0
+
+        msg.target_system = 1
+        msg.target_component = 1
+        msg.source_system = 1
+        msg.source_component = 1
+        msg.from_external = True
+
+        msg.timestamp = int(
+            self.get_clock().now().nanoseconds / 1000
+        )
+
+        self.command_publisher.publish(msg)
+
+        self.get_logger().info('Vehicle disarmed')
+
     def command_loop(self):
         while rclpy.ok():
             try:
@@ -110,6 +130,8 @@ class CommanderNode(Node):
 
                 if tokens[0] == "arm":
                     self.arm()
+                elif tokens[0] == "disarm":
+                    self.disarm()
                 elif tokens[0] == "offboard":
                     self.enable_offboard()
                 elif tokens[0] == "start":
@@ -119,7 +141,7 @@ class CommanderNode(Node):
                 elif tokens[0] == "forward":
                     distance = float(tokens[1]) if len(tokens) > 1 else 1.0
                     self.forward(distance)
-                elif tokens[0] == "back":
+                elif tokens[0] == "backward":
                     distance = float(tokens[1]) if len(tokens) > 1 else 1.0
                     self.forward(-distance)
                 
