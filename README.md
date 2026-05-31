@@ -22,7 +22,7 @@ PX4 Console is an open-source command-line interface for PX4 Autopilot built on 
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-org/px4_console.git
+git clone https://github.com/Iskra-YT/px4_console.git
 cd px4_console
 ```
 
